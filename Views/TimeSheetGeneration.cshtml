@@ -1,0 +1,98 @@
+﻿@model ORP.Administration.Models.TimeSheetReportModel
+
+@using ORP.Administration.Models
+@{
+    ViewBag.Title = "TimeSheet Generation";
+}
+@Html.Label("", "TimeSheet Generation", new { @class = "MainHeadText" })
+
+@using (Html.BeginForm())
+{
+    if (Model != null)
+    {
+        <div class="row">
+            <div>
+                <div class="col-sm-2 text-lg-left">
+                    <label>Select User</label>
+                    @Html.DropDownListFor(model => model.SelectedUser, Model.Users, new { @id = "ddlUsers", @class = "form-control" })
+                </div>
+                <div class="col-sm-2 text-lg-right">
+                    <label>Select Project</label>
+                    @Html.DropDownListFor(model => model.SelectedProject, Model.Projects, new { @id = "ddlProjects", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <div class="col-sm-2 text-lg-left">
+                    <label class="control-label" for="date">Start Time</label>
+                    @Html.TextBoxFor(model => model.ForDate, new { @id = "starttimepicker", @class = "form-control", @placeholder = "Select Date" })
+                    @Html.DropDownListFor(model => model.StartHour,
+                    Enumerable.Range(00, 24).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                    "-- Hour --", new { @id= "startHour" })
+                    @Html.DropDownListFor(model => model.StartMinute,
+                   Enumerable.Range(00, 60).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                   "-- Minute --", new { @id = "startMinute" })
+                </div>
+                <div class="col-sm-2 text-lg-right">
+                    <label class="control-label" for="date">End Time</label>
+                    @Html.TextBoxFor(model => model.ForDate, new { @id = "endtimepicker", @class = "form-control", @placeholder = "Select Date" })
+                    @Html.DropDownListFor(model => model.EndHour,
+                   Enumerable.Range(00, 24).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                   "-- Hour --", new { @id = "endHour" })
+                    @Html.DropDownListFor(model => model.EndMinute,
+                   Enumerable.Range(00, 60).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                   "-- Minute --", new { @id = "ednMinute" })
+                </div>
+                <div class="col-sm-2 text-lg-right">
+                    <label class="control-label" for="date">Lunch Start Time</label>
+                    @Html.TextBoxFor(model => model.ForDate, new { @id = "lunchtimepicker", @class = "form-control", @placeholder = "Select Date" })
+                    @Html.DropDownListFor(model => model.LunchHour,
+                  Enumerable.Range(00, 24).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                  "-- Hour --", new { @id = "lunchHour" })
+                    @Html.DropDownListFor(model => model.LunchMinute,
+                   Enumerable.Range(00, 60).Select(i => new SelectListItem { Value = i.ToString(), Text = i.ToString() }),
+                   "-- Minute --", new { @id = "lunchMinute" })
+                    <input type="submit" class="btn btn-normal" value="Submit" id="btnsubmit" style="float:right;" />
+                </div>
+            </div>
+        </div>
+    }
+
+    <input type="hidden" value="@Url.Action("TimeSheetGeneration", "Reports")" id="UrlTimeSheetGeneration" />
+    <input type="hidden" value="@Url.Action("ViewTimeSheet", "Reports")" id="UrlViewTimeSheet" />
+    <input type="hidden" value="@Url.Action("Error", "Reports",new { controllerName="Reports"})" id="UrlErrorPage" />
+}
+<div id="loading" style="display:none" class="loading">
+</div>
+<div class="modal small" tabindex="-1" role="dialog" id="ValidationModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#E74C3C !important; color:ghostwhite;">
+                <h5 class="modal-title text-white">Validation Error</h5>
+            </div>
+            <div class="modal-body materialize-red">
+                <p id="validationMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<style type="text/css">
+    .btn-group {
+        padding-left: 20px;
+    }
+
+    .ui-dialog-titlebar {
+        display: none;
+    }
+</style>
+<script type="text/javascript" src="~/Scripts/timesheet.js"></script>
+
+
+
+
